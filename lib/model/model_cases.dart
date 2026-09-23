@@ -65,7 +65,6 @@ class CaseItem {
   final String pt;
   final String created_at;
 
-
   bool get isFull {
     switch (groupTitle) {
       case 'New Case':
@@ -75,6 +74,10 @@ class CaseItem {
       default:
         return true;
     }
+  }
+
+  String get createdAt {
+    return DateHandle().formatWithHourDashboard(DateTime.parse(created_at));
   }
 
   String get sisaWaktu {
@@ -95,7 +98,7 @@ class CaseItem {
         sla = const Duration(hours: 1);
         break;
       default:
-        return DateHandle().formatWithHour(DateTime.parse(done));
+        return DateHandle().formatWithHourDashboard(DateTime.parse(done));
     }
 
     final deadline = start.add(sla);
@@ -111,7 +114,6 @@ class CaseItem {
   }
 
   bool get isNegativeWaktu {
-
     if (real_status == 7) {
       return false;
     }
@@ -138,7 +140,7 @@ class CaseItem {
 
   factory CaseItem.fromJson(Map<String, dynamic> json, String groupTitle) =>
       CaseItem(
-        real_status : json['real_status'] ?? 0,
+        real_status: json['real_status'] ?? 0,
         id: json['id'],
         pt: json['pt'] ?? '',
         service: json['service'] ?? '',
@@ -146,6 +148,6 @@ class CaseItem {
         time: json['time'],
         groupTitle: groupTitle,
         done: json['done'] ?? '',
-        created_at : json['created_at'] ?? '',
+        created_at: json['created_at'] ?? '',
       );
 }

@@ -27,6 +27,9 @@ class SurveyDetail {
     required this.noPolisi,
     required this.nomorRangka,
     required this.carInfo,
+    this.averageRating,
+    this.phoneOvo,
+    this.answers = const [],
   });
 
   final int id;
@@ -41,20 +44,22 @@ class SurveyDetail {
   final String noPolisi;
   final String nomorRangka;
   final String carInfo;
+  final double? averageRating;
+  final String? phoneOvo;
+  final List<SurveyAnswerItem> answers;
 
   String get titleTransaksi {
     if (type == "MITSUBISHI-LEVEL-3") {
       return 'SERVICE-$idTransaksi';
     } else {
       return 'EM-$idTransaksi';
-
     }
   }
 
   factory SurveyDetail.fromJson(Map<String, dynamic> json) => SurveyDetail(
         id: json["id"],
-        carInfo : json["car_info"] ?? "",
-        nomorRangka : json["nomor_rangka"] ?? "",
+        carInfo: json["car_info"] ?? "",
+        nomorRangka: json["nomor_rangka"] ?? "",
         idTransaksi: json["id_transaksi"],
         type: json["type"],
         ratingPuas: json["rating_puas"],
@@ -64,5 +69,34 @@ class SurveyDetail {
         createdBy: json["created_by"],
         layananName: json["layanan_name"],
         noPolisi: json["no_polisi"],
+        averageRating: json["average_rating"] != null
+            ? (json["average_rating"] as num).toDouble()
+            : null,
+        phoneOvo: json["phone_ovo"],
+        answers: json["answers"] != null
+            ? (json["answers"] as List)
+                .map((e) => SurveyAnswerItem.fromJson(e))
+                .toList()
+            : [],
+      );
+}
+
+// ===== MODEL BARU =====
+class SurveyAnswerItem {
+  SurveyAnswerItem({
+    required this.questionId,
+    required this.rating,
+    required this.alasan,
+  });
+
+  final int questionId;
+  final double rating;
+  final String alasan;
+
+  factory SurveyAnswerItem.fromJson(Map<String, dynamic> json) =>
+      SurveyAnswerItem(
+        questionId: json["question_id"],
+        rating: (json["rating"] as num).toDouble(),
+        alasan: json["alasan"] ?? "",
       );
 }

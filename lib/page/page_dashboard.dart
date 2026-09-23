@@ -48,9 +48,9 @@ class PageDashboardState extends State<PageDashboard> {
             // ===== HEADER =====
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: Colors.white,
-                boxShadow: const [
+                boxShadow: [
                   BoxShadow(
                     color: Colors.black12,
                     offset: Offset(0, 2),
@@ -77,8 +77,10 @@ class PageDashboardState extends State<PageDashboard> {
                             vertical: 6,
                           ),
                           decoration: BoxDecoration(
-                            color: AppColor.mainColor,
-                            borderRadius: BorderRadius.circular(8),
+                            border:
+                                Border.all(color: AppColor.grey, width: 1.5),
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10),
                           ),
                           child: Text(
                             'Monthly Total : ${prov.layanan.total}',
@@ -153,7 +155,7 @@ class PageDashboardState extends State<PageDashboard> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    '${model.title}',
+                                    model.title,
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       color: Colors.white,
@@ -217,9 +219,9 @@ class PageDashboardState extends State<PageDashboard> {
             // ===== FOOTER =====
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: Colors.white,
-                boxShadow: const [
+                boxShadow: [
                   BoxShadow(
                     color: Colors.black12,
                     offset: Offset(0, -2),
@@ -296,7 +298,9 @@ class PageDashboardState extends State<PageDashboard> {
                       scrollDirection: Axis.horizontal,
                       child: Row(
                         children: [
-                          for (int i = 0; i < prov.layanan.data.length; i++) ...[
+                          for (int i = 0;
+                              i < prov.layanan.data.length;
+                              i++) ...[
                             LegendItem(
                               item: prov.layanan.data[i],
                               isLargeScreen: isLargeScreen,
@@ -315,8 +319,9 @@ class PageDashboardState extends State<PageDashboard> {
                       vertical: 8,
                     ),
                     decoration: BoxDecoration(
-                      color: AppColor.mainColor,
-                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: AppColor.grey, width: 1.5),
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
                     ),
                     child: Text(
                       'Total : ${prov.layanan.totalLayanan}',
@@ -351,7 +356,11 @@ class PageDashboardState extends State<PageDashboard> {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-               Icon(Icons.calendar_today, size: 18, color: AppColor.dark, ),
+              Icon(
+                Icons.calendar_today,
+                size: 18,
+                color: AppColor.dark,
+              ),
               const SizedBox(width: 8),
               Text(
                 prov.timeStartText,
@@ -386,7 +395,7 @@ class PageDashboardState extends State<PageDashboard> {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-               Icon(Icons.business, size: 18, color: AppColor.dark),
+              Icon(Icons.business, size: 18, color: AppColor.dark),
               const SizedBox(width: 8),
               Text(
                 prov.perusahaanText,
@@ -493,8 +502,8 @@ class _CaseCardState extends State<CaseCard> {
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       decoration: BoxDecoration(
         color: _shouldBlink
-            ? (_blink ? baseColor.withOpacity(0.12) : Colors.white)
-            : baseColor.withOpacity(0.08),
+            ? (_blink ? baseColor.withValues(alpha: 0.12) : Colors.white)
+            : baseColor.withValues(alpha: 0.08),
         border: Border.all(color: baseColor, width: 2),
         borderRadius: BorderRadius.circular(10),
       ),
@@ -519,7 +528,8 @@ class _CaseCardState extends State<CaseCard> {
               ),
               // Timer Badge
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                 decoration: BoxDecoration(
                   color: _shouldBlink && _blink
                       ? Colors.red
@@ -545,7 +555,7 @@ class _CaseCardState extends State<CaseCard> {
             style: TextStyle(
               fontSize: smallFontSize,
               fontWeight: FontWeight.w500,
-              color: AppColor.dark.withOpacity(0.8),
+              color: AppColor.dark.withValues(alpha: 0.8),
             ),
             overflow: TextOverflow.ellipsis,
             maxLines: 1,
@@ -563,7 +573,7 @@ class _CaseCardState extends State<CaseCard> {
                   style: TextStyle(
                     fontSize: smallFontSize - 1,
                     fontWeight: FontWeight.bold,
-                    color: AppColor.dark.withOpacity(0.6),
+                    color: AppColor.dark.withValues(alpha: 0.6),
                   ),
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
@@ -571,10 +581,10 @@ class _CaseCardState extends State<CaseCard> {
               ),
               // Created At
               Text(
-                '🕒 ${_formatCreatedAt(item.created_at)}',
+                '🕒 ${item.createdAt}',
                 style: TextStyle(
                   fontSize: smallFontSize - 1,
-                  color: AppColor.dark.withOpacity(0.5),
+                  color: AppColor.dark.withValues(alpha: 0.5),
                   fontWeight: FontWeight.w400,
                 ),
               ),
@@ -583,17 +593,6 @@ class _CaseCardState extends State<CaseCard> {
         ],
       ),
     );
-  }
-
-  String _formatCreatedAt(String raw) {
-    try {
-      final dt = DateTime.parse(raw);
-      final hour = dt.hour.toString().padLeft(2, '0');
-      final minute = dt.minute.toString().padLeft(2, '0');
-      return '$hour:$minute';
-    } catch (_) {
-      return '-';
-    }
   }
 }
 

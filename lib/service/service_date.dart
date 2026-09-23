@@ -141,6 +141,13 @@ class DateHandle {
     return "${dateTime.day} ${getMonth(dateTime.month.toString())} ${dateTime.year}, $hour:$minutes";
   }
 
+  String formatWithHourDashboard(DateTime dateTime) {
+    String two(int n) => n.toString().padLeft(2, '0');
+
+    return '${two(dateTime.day)}-${two(dateTime.month)}-${dateTime.year}, '
+        '${two(dateTime.hour)}:${two(dateTime.minute)}';
+  }
+
   String getTimeFormat(DateTime dateTime) {
     var hour = "";
     var minutes = "";

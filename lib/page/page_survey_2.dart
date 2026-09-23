@@ -63,39 +63,6 @@ class PageSurveyVersi2State extends State<PageSurveyVersi2> {
                     ItemUserGarage(
                       model: prov.responseGarasi!.data,
                     ),
-                    // Container(
-                    //   margin: const EdgeInsets.only(bottom: 15),
-                    //   padding: const EdgeInsets.all(15),
-                    //   decoration: BoxDecoration(
-                    //     color: Colors.white,
-                    //     borderRadius: BorderRadius.circular(10),
-                    //     border: Border.all(color: Colors.grey.withAlpha(90)),
-                    //   ),
-                    //   child: Column(
-                    //     crossAxisAlignment: CrossAxisAlignment.start,
-                    //     children: [
-                    //       Text(
-                    //         'Nomor HP (Ovo/Gopay)',
-                    //         style: AppFonts.moreSmall,
-                    //       ),
-                    //       const SizedBox(height: 8),
-                    //       TextField(
-                    //         keyboardType: TextInputType.number,
-                    //         controller: prov.phoneController,
-                    //         decoration: const InputDecoration(
-                    //           hintText: 'Contoh: 081234567890',
-                    //           border: OutlineInputBorder(),
-                    //         ),
-                    //       ),
-                    //       const SizedBox(height: 8),
-                    //       Text(
-                    //         'Dapatkan saldo OVO/Gopay dengan mengisi nomor HP Anda. Saldo akan dikirimkan maksimal 7 hari kerja setelah survey selesai.',
-                    //         style: AppFonts.moreSmall
-                    //             .copyWith(color: AppColor.secondColor),
-                    //       ),
-                    //     ],
-                    //   ),
-                    // ),
                     Container(
                       width: double.infinity,
                       padding: const EdgeInsets.all(15),
@@ -218,7 +185,6 @@ class PageSurveyVersi2State extends State<PageSurveyVersi2> {
                           );
                         },
                         child: Container(
-                          //height: 40,
                           width: double.infinity,
                           padding: const EdgeInsets.only(
                             left: 15,
@@ -249,26 +215,7 @@ class PageSurveyVersi2State extends State<PageSurveyVersi2> {
                     ),
                     const SizedBox(height: 75),
                   ] else ...[
-                    Container(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image.asset(
-                            "assets/checked.png",
-                            height: 75,
-                          ),
-                          const SizedBox(height: 15),
-                          Center(
-                            child: Text(
-                              'Terimakasih Atas Partisipasi Anda\nSalam Montiro.id',
-                              textAlign: TextAlign.center,
-                              style: AppFonts.bigText,
-                            ),
-                          )
-                        ],
-                      ),
-                    )
+                    _buildSuccessSummary(prov),
                   ],
                 ],
               ),
@@ -276,6 +223,262 @@ class PageSurveyVersi2State extends State<PageSurveyVersi2> {
           ),
         ),
       ),
+    );
+  }
+
+  // ================================================================
+  // SUMMARY SETELAH SUBMIT / SUDAH DIISI
+  // ================================================================
+  Widget _buildSuccessSummary(ProviderSurveyVersi2 prov) {
+    final detail = prov.responseSurvey!.detail;
+    final answers = detail.answers;
+    final phone = detail.phoneOvo ?? '';
+    final avgRating = detail.averageRating;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(height: 15),
+
+        // ===== HEADER SUKSES =====
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: Colors.green.withAlpha(120)),
+          ),
+          child: Column(
+            children: [
+              Image.asset("assets/checked.png", height: 60),
+              const SizedBox(height: 12),
+              Text(
+                'Terimakasih Atas Partisipasi Anda',
+                textAlign: TextAlign.center,
+                style: AppFonts.bigText,
+              ),
+              const SizedBox(height: 4),
+              Text(
+                'Salam Montiro.id',
+                textAlign: TextAlign.center,
+                style: AppFonts.smallText.copyWith(color: AppColor.secondColor),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 15),
+
+        // ===== INFO CASE =====
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(15),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: Colors.grey.withAlpha(90)),
+          ),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: Text('Case ID', style: AppFonts.moreSmall),
+                  ),
+                  Text(detail.titleTransaksi, style: AppFonts.smallTextBold),
+                ],
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    child: Text('Layanan', style: AppFonts.moreSmall),
+                  ),
+                  Text(
+                    detail.layananName.toUpperCase(),
+                    style: AppFonts.smallText,
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 15),
+
+        // ===== RINGKASAN RATA-RATA =====
+        if (avgRating != null)
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(15),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: Colors.grey.withAlpha(90)),
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    'Rata-rata Skor Anda',
+                    style: AppFonts.smallTextBold,
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 6,
+                  ),
+                  decoration: BoxDecoration(
+                    color: AppColor.orange.withAlpha(30),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        '${avgRating.toStringAsFixed(1)} / 10',
+                        style: AppFonts.smallTextBold.copyWith(
+                          color: Colors.orange.shade800,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        const SizedBox(height: 15),
+
+        // ===== DETAIL JAWABAN PER PERTANYAAN =====
+        ...answers.map<Widget>((ans) {
+          // Cari teks pertanyaan dari prov.questions (by id)
+          final q = prov.questions.firstWhere(
+            (item) => item.id == ans.questionId,
+            orElse: () => SurveyQuestion(
+              id: ans.questionId,
+              text: 'Pertanyaan ${ans.questionId}',
+            ),
+          );
+
+          return Container(
+            width: double.infinity,
+            margin: const EdgeInsets.only(bottom: 15),
+            padding: const EdgeInsets.all(15),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: Colors.grey.withAlpha(90)),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Nomor + pertanyaan
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      width: 24,
+                      height: 24,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: AppColor.orange.withAlpha(40),
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: Text(
+                        '${ans.questionId}',
+                        style: AppFonts.moreSmall.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Text(q.text, style: AppFonts.smallText),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+
+                // Skor
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 6,
+                  ),
+                  decoration: BoxDecoration(
+                    color: AppColor.orange.withAlpha(25),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        'Skor: ${ans.rating.toInt()} / 10',
+                        style: AppFonts.moreSmall.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.orange.shade800,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                // Alasan (kalau ada)
+                if (ans.alasan.trim().isNotEmpty) ...[
+                  const SizedBox(height: 12),
+                  Text(
+                    'Alasan:',
+                    style: AppFonts.moreSmall.copyWith(
+                      color: AppColor.secondColor,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade50,
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(color: Colors.grey.shade200),
+                    ),
+                    child: Text(ans.alasan, style: AppFonts.moreSmall),
+                  ),
+                ],
+              ],
+            ),
+          );
+        }).toList(),
+
+        // ===== NOMOR HP OVO/GOPAY =====
+        if (phone.trim().isNotEmpty)
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(15),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: Colors.grey.withAlpha(90)),
+            ),
+            child: Row(
+              children: [
+                const Icon(Icons.phone_android, size: 18, color: Colors.grey),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Nomor HP (Ovo/Gopay)', style: AppFonts.moreSmall),
+                      const SizedBox(height: 2),
+                      Text(phone, style: AppFonts.smallTextBold),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+        const SizedBox(height: 30),
+      ],
     );
   }
 }
