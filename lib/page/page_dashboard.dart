@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:montiro_external/model/model_cases.dart';
 import 'package:montiro_external/model/model_layanan.dart';
@@ -15,6 +16,7 @@ class PageDashboard extends StatefulWidget {
 }
 
 class PageDashboardState extends State<PageDashboard> {
+  //
   @override
   void initState() {
     super.initState();
@@ -37,85 +39,159 @@ class PageDashboardState extends State<PageDashboard> {
   @override
   Widget build(BuildContext context) {
     final prov = Provider.of<ProviderDashboard>(context);
-    final screenWidth = MediaQuery.of(context).size.width;
-    final isLargeScreen = screenWidth > 1200;
 
     return Scaffold(
-      backgroundColor: Colors.grey[50],
+      backgroundColor: Colors.transparent,
       body: SafeArea(
         child: Column(
           children: [
-            // ===== HEADER =====
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                boxShadow: [
+              // margin: EdgeInsets.only(bottom: 16),
+              decoration: BoxDecoration(
+                color: const Color(0xFFF6F6F6),
+                borderRadius:
+                    BorderRadius.circular(12), // opsional, untuk efek halus
+                boxShadow: const [
                   BoxShadow(
                     color: Colors.black12,
-                    offset: Offset(0, 2),
-                    blurRadius: 6,
+                    offset: Offset(0, 4),
+                    blurRadius: 8,
                   ),
                 ],
               ),
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
               child: Row(
                 children: [
-                  // Filter Section
                   Expanded(
-                    flex: 2,
-                    child: Wrap(
-                      spacing: 12,
-                      runSpacing: 8,
-                      alignment: WrapAlignment.start,
-                      crossAxisAlignment: WrapCrossAlignment.center,
+                    child: Row(
                       children: [
-                        _buildFilterDate(prov),
-                        _buildFilterCompany(prov),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 14,
-                            vertical: 6,
-                          ),
-                          decoration: BoxDecoration(
-                            border:
-                                Border.all(color: AppColor.grey, width: 1.5),
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Text(
-                            'Monthly Total : ${prov.layanan.total}',
-                            style: AppFonts.smallTextBold.copyWith(
-                              fontSize: isLargeScreen ? 16 : 14,
-                              color: AppColor.dark,
+                        SizedBox(
+                          child: MouseRegion(
+                            cursor: SystemMouseCursors.click,
+                            child: GestureDetector(
+                              onTap: () {
+                                prov.chooseDateStart(context);
+                              },
+                              child: Container(
+                                height: 25,
+                                padding: const EdgeInsets.only(
+                                  left: 8,
+                                  right: 8,
+                                  // top : 5,
+                                  // bottom : 5,
+                                ),
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: AppColor.grey,
+                                    width: 1,
+                                  ),
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Center(
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        prov.timeStartText,
+                                        maxLines: 1,
+                                        style: AppFonts.smallText.copyWith(
+                                          color: AppColor.dark,
+                                          fontSize: 11,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 15),
+                                      Image.asset(
+                                        "assets/ic_panah.png",
+                                        height: 15,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
                             ),
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 8,
+                        ),
+                        SizedBox(
+                          child: MouseRegion(
+                            cursor: SystemMouseCursors.click,
+                            child: GestureDetector(
+                              onTap: () {
+                                prov.getPerusahaan(context);
+                              },
+                              child: Container(
+                                height: 25,
+                                padding: const EdgeInsets.only(
+                                  left: 8,
+                                  right: 8,
+                                ),
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: AppColor.grey,
+                                    width: 1,
+                                  ),
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Center(
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        prov.perusahaanText,
+                                        maxLines: 1,
+                                        style: AppFonts.smallText.copyWith(
+                                          color: AppColor.dark,
+                                          fontSize: 11,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 15),
+                                      Image.asset(
+                                        "assets/ic_panah.png",
+                                        height: 15,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 8,
+                        ),
+                        Text(
+                          'Monthly Total  : ${prov.layanan.total}',
+                          maxLines: 1,
+                          style: AppFonts.smallTextBold.copyWith(
+                            color: AppColor.dark,
                           ),
                         ),
                       ],
                     ),
                   ),
-                  // Title
-                  Expanded(
-                    flex: 1,
-                    child: Text(
-                      'Dashboard Case Monitoring'.toUpperCase(),
-                      textAlign: TextAlign.center,
-                      style: AppFonts.mediumInterBoldText.copyWith(
-                        color: AppColor.dark,
-                        fontSize: isLargeScreen ? 22 : 18,
-                        letterSpacing: 1.5,
-                      ),
+                  const SizedBox(
+                    width: 15,
+                  ),
+                  Text(
+                    'Dashboard Case Monitoring'.toUpperCase(),
+                    maxLines: 1,
+                    style: AppFonts.mediumInterBoldText.copyWith(
+                      color: AppColor.dark,
+                      fontSize: 18,
                     ),
                   ),
-                  const Spacer(),
+                  const SizedBox(
+                    width: 15,
+                  ),
                 ],
               ),
             ),
-
-            // ===== MAIN CONTENT =====
             Expanded(
               child: Container(
-                color: Colors.grey[100],
-                padding: const EdgeInsets.all(8),
+                color: Colors.white,
+                //margin: EdgeInsets.only(top: 16),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: prov.cases.data.map((model) {
@@ -123,72 +199,27 @@ class PageDashboardState extends State<PageDashboard> {
                     final items = model.data;
                     return Expanded(
                       child: Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 4),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(12),
-                          boxShadow: const [
-                            BoxShadow(
-                              color: Colors.black,
-                              offset: Offset(0, 2),
-                              blurRadius: 8,
-                            ),
-                          ],
-                        ),
+                        color: Colors.black,
+                        padding:
+                            const EdgeInsets.only(left: 4, right: 4, top: 4),
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                            // Header Group
                             Container(
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 12,
-                                horizontal: 16,
-                              ),
-                              decoration: BoxDecoration(
-                                color: color,
-                                borderRadius: const BorderRadius.vertical(
-                                  top: Radius.circular(12),
+                              padding: const EdgeInsets.all(8),
+                              color: color,
+                              child: Center(
+                                child: Text(
+                                  '${model.title} (${model.data.length})',
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white),
                                 ),
                               ),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    model.title,
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                      fontSize: isLargeScreen ? 18 : 15,
-                                      letterSpacing: 1,
-                                    ),
-                                  ),
-                                  Container(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 12,
-                                      vertical: 4,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: Colors.white.withOpacity(0.2),
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                    child: Text(
-                                      '${model.data.length}',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white,
-                                        fontSize: isLargeScreen ? 16 : 14,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
                             ),
-                            // List Cases
+                            const SizedBox(height: 4),
                             Expanded(
                               child: Container(
-                                color: Colors.grey[50],
-                                padding: const EdgeInsets.all(6),
+                                color: Colors.grey[100],
                                 child: ListView.builder(
                                   itemCount: items.length,
                                   itemBuilder: (context, index) {
@@ -201,7 +232,6 @@ class PageDashboardState extends State<PageDashboard> {
                                           : model.title == "Validated"
                                               ? "10:00"
                                               : "00:00",
-                                      isLargeScreen: isLargeScreen,
                                     );
                                   },
                                 ),
@@ -215,75 +245,65 @@ class PageDashboardState extends State<PageDashboard> {
                 ),
               ),
             ),
-
-            // ===== FOOTER =====
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
               decoration: const BoxDecoration(
-                color: Colors.white,
+                color: Color(0xFFF6F6F6),
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black12,
                     offset: Offset(0, -2),
-                    blurRadius: 6,
+                    blurRadius: 4,
                   ),
                 ],
               ),
               child: Row(
                 children: [
-                  // Agents
                   Expanded(
-                    flex: 2,
                     child: SizedBox(
-                      height: 40,
+                      height: 30,
                       child: ListView.builder(
                         scrollDirection: Axis.horizontal,
                         itemCount: prov.agents.data.length,
                         itemBuilder: (context, index) {
                           final item = prov.agents.data[index];
                           return Container(
-                            margin: const EdgeInsets.only(right: 16),
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 6,
-                            ),
+                            margin: const EdgeInsets.only(right: 12),
                             decoration: BoxDecoration(
-                              color: Colors.grey[100],
-                              borderRadius: BorderRadius.circular(20),
-                              border: Border.all(
-                                color: Colors.grey.shade300,
-                                width: 1.5,
-                              ),
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(8),
+                              boxShadow: const [
+                                BoxShadow(
+                                  color: Colors.black12,
+                                  blurRadius: 6,
+                                  offset: Offset(0, 3),
+                                ),
+                              ],
+                              border: Border.all(color: Colors.grey.shade300),
                             ),
                             child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
+                                const SizedBox(width: 15),
                                 Text(
                                   item.agent,
-                                  style: TextStyle(
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(
                                     fontWeight: FontWeight.bold,
-                                    fontSize: isLargeScreen ? 16 : 14,
-                                    color: AppColor.dark,
+                                    fontSize: 14,
                                   ),
                                 ),
                                 const SizedBox(width: 10),
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 10,
-                                    vertical: 2,
-                                  ),
-                                  decoration: BoxDecoration(
+                                Text(
+                                  item.countHandle.toString(),
+                                  style: const TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
                                     color: Colors.blueAccent,
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  child: Text(
-                                    item.countHandle.toString(),
-                                    style: TextStyle(
-                                      fontSize: isLargeScreen ? 16 : 14,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                    ),
                                   ),
                                 ),
+                                const SizedBox(width: 15),
                               ],
                             ),
                           );
@@ -291,20 +311,20 @@ class PageDashboardState extends State<PageDashboard> {
                       ),
                     ),
                   ),
-                  // Legends
+                  const SizedBox(
+                    width: 15,
+                  ),
                   Expanded(
-                    flex: 2,
                     child: SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
+                      reverse: true, // Bisa juga dipakai untuk membalik scroll
                       child: Row(
+                        textDirection: TextDirection.rtl, // ini yang penting
                         children: [
                           for (int i = 0;
                               i < prov.layanan.data.length;
                               i++) ...[
-                            LegendItem(
-                              item: prov.layanan.data[i],
-                              isLargeScreen: isLargeScreen,
-                            ),
+                            LegendItem(item: prov.layanan.data[i]),
                             if (i != prov.layanan.data.length - 1)
                               const SizedBox(width: 20),
                           ],
@@ -312,25 +332,24 @@ class PageDashboardState extends State<PageDashboard> {
                       ),
                     ),
                   ),
-                  // Total
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 8,
-                    ),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: AppColor.grey, width: 1.5),
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Text(
-                      'Total : ${prov.layanan.totalLayanan}',
-                      style: AppFonts.normalTextBold.copyWith(
-                        fontSize: isLargeScreen ? 20 : 16,
-                        color: AppColor.dark,
-                      ),
-                    ),
+                  const SizedBox(
+                    width: 20,
                   ),
+                  Container(
+                    height: 30,
+                    width: 2,
+                    color: Colors.black,
+                  ),
+                  const SizedBox(
+                    width: 20,
+                  ),
+                  Text(
+                    'Total : ${prov.layanan.totalLayanan}',
+                    style: AppFonts.normalTextBold.copyWith(
+                      fontSize: 18,
+                      color: AppColor.dark,
+                    ),
+                  )
                 ],
               ),
             ),
@@ -339,97 +358,18 @@ class PageDashboardState extends State<PageDashboard> {
       ),
     );
   }
-
-  // ===== Filter Date =====
-  Widget _buildFilterDate(ProviderDashboard prov) {
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      child: GestureDetector(
-        onTap: () => prov.chooseDateStart(context),
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-          decoration: BoxDecoration(
-            border: Border.all(color: AppColor.grey, width: 1.5),
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(
-                Icons.calendar_today,
-                size: 18,
-                color: AppColor.dark,
-              ),
-              const SizedBox(width: 8),
-              Text(
-                prov.timeStartText,
-                style: AppFonts.smallText.copyWith(
-                  color: AppColor.dark,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              const SizedBox(width: 10),
-              Icon(Icons.arrow_drop_down, size: 20, color: AppColor.dark),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  // ===== Filter Company =====
-  Widget _buildFilterCompany(ProviderDashboard prov) {
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      child: GestureDetector(
-        onTap: () => prov.getPerusahaan(context),
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-          decoration: BoxDecoration(
-            border: Border.all(color: AppColor.grey, width: 1.5),
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(Icons.business, size: 18, color: AppColor.dark),
-              const SizedBox(width: 8),
-              Text(
-                prov.perusahaanText,
-                style: AppFonts.smallText.copyWith(
-                  color: AppColor.dark,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              const SizedBox(width: 10),
-              Icon(Icons.arrow_drop_down, size: 20, color: AppColor.dark),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
 }
 
-// ============================================================
-// CASE CARD
-// ============================================================
 class CaseCard extends StatefulWidget {
   final CaseItem item;
   final Color color;
   final String timeBlink;
-  final bool isLargeScreen;
 
   const CaseCard({
     super.key,
     required this.item,
     required this.color,
     required this.timeBlink,
-    this.isLargeScreen = false,
   });
 
   @override
@@ -455,6 +395,7 @@ class _CaseCardState extends State<CaseCard> {
     super.dispose();
   }
 
+  // ---------- helper ----------
   Duration _parseBlinkLimit(String str) {
     final parts = str.split(':');
     if (parts.length == 2) {
@@ -471,6 +412,7 @@ class _CaseCardState extends State<CaseCard> {
   }
 
   Duration? _parseSisa(String s) {
+    // Terima "-HH:MM:SS" atau "HH:MM:SS"
     final clean = s.startsWith('-') ? s.substring(1) : s;
     final parts = clean.split(':');
     if (parts.length != 3) return null;
@@ -481,150 +423,147 @@ class _CaseCardState extends State<CaseCard> {
   }
 
   bool get _shouldBlink {
+    // Tidak berkedip jika case penuh
     if (widget.item.isFull) return false;
+
+    // Kedip kalau sudah minus
     if (widget.item.isNegativeWaktu) return true;
+
+    // Kedip kalau sisa <= timeBlink
     final sisaDur = _parseSisa(widget.item.sisaWaktu);
     final blinkLimit = _parseBlinkLimit(widget.timeBlink);
     if (sisaDur == null) return false;
     return sisaDur <= blinkLimit;
   }
 
+  String _formatCreatedAt(String raw) {
+    try {
+      final dt = DateTime.parse(raw);
+      final day = dt.day.toString().padLeft(2, '0');
+      final month = dt.month.toString().padLeft(2, '0');
+      final year = dt.year.toString().substring(2); // ambil 2 digit terakhir
+      final hour = dt.hour.toString().padLeft(2, '0');
+      final minute = dt.minute.toString().padLeft(2, '0');
+      return '$day-$month-$year, $hour:$minute';
+    } catch (_) {
+      return '-';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final item = widget.item;
     final baseColor = _shouldBlink ? Colors.red : widget.color;
-    final isLarge = widget.isLargeScreen;
-    final fontSize = isLarge ? 16.0 : 13.0;
-    final smallFontSize = isLarge ? 13.0 : 11.0;
 
     return Container(
-      margin: const EdgeInsets.only(bottom: 8),
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      margin: const EdgeInsets.all(5),
       decoration: BoxDecoration(
         color: _shouldBlink
-            ? (_blink ? baseColor.withValues(alpha: 0.12) : Colors.white)
-            : baseColor.withValues(alpha: 0.08),
+            ? (_blink ? baseColor.withValues(alpha: 0.15) : Colors.transparent)
+            : baseColor.withValues(alpha: 0.15),
         border: Border.all(color: baseColor, width: 2),
         borderRadius: BorderRadius.circular(10),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // === TOP ROW: Timer + Sisa Waktu ===
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              // ID + Agent
-              Expanded(
-                child: Text(
-                  '#${item.id} • ${item.agent.toUpperCase()}',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: fontSize,
-                    color: AppColor.dark,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-              // Timer Badge
-              Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                decoration: BoxDecoration(
-                  color: _shouldBlink && _blink
-                      ? Colors.red
-                      : Colors.orange.shade700,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Text(
-                  item.sisaWaktu,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: smallFontSize,
+      child: Padding(
+        padding: const EdgeInsets.all(8),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // created_at (kiri) + timer badge (kanan)
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  '🕒 ${_formatCreatedAt(item.created_at)}',
+                  style: const TextStyle(
+                    fontSize: 11,
+                    color: Colors.black54,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 4),
-
-          // === Service Name ===
-          Text(
-            item.service,
-            style: TextStyle(
-              fontSize: smallFontSize,
-              fontWeight: FontWeight.w500,
-              color: AppColor.dark.withValues(alpha: 0.8),
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: Colors.orange,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Text(
+                    item.sisaWaktu,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 11,
+                    ),
+                  ),
+                ),
+              ],
             ),
-            overflow: TextOverflow.ellipsis,
-            maxLines: 1,
-          ),
-          const SizedBox(height: 4),
+            const SizedBox(height: 3),
 
-          // === Bottom Row: PT + Created At ===
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              // PT
-              Flexible(
-                child: Text(
-                  item.pt.toUpperCase(),
-                  style: TextStyle(
-                    fontSize: smallFontSize - 1,
-                    fontWeight: FontWeight.bold,
-                    color: AppColor.dark.withValues(alpha: 0.6),
+            // id + agent
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    '${item.id} - ${item.agent.toUpperCase()}',
+                    maxLines: 1,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 11,
+                    ),
                   ),
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
                 ),
+              ],
+            ),
+            const SizedBox(height: 3),
+
+            // service
+            Text(
+              item.service,
+              maxLines: 1,
+              style: const TextStyle(fontSize: 11),
+            ),
+            const SizedBox(height: 3),
+
+            // pt
+            Text(
+              item.pt.toUpperCase(),
+              maxLines: 1,
+              style: const TextStyle(
+                fontSize: 9,
+                fontWeight: FontWeight.bold,
               ),
-              // Created At
-              Text(
-                '🕒 ${item.createdAt}',
-                style: TextStyle(
-                  fontSize: smallFontSize - 1,
-                  color: AppColor.dark.withValues(alpha: 0.5),
-                  fontWeight: FontWeight.w400,
-                ),
-              ),
-            ],
-          ),
-        ],
+            ),
+          ],
+        ),
       ),
     );
   }
 }
 
-// ============================================================
-// LEGEND ITEM
-// ============================================================
 class LegendItem extends StatelessWidget {
-  const LegendItem({super.key, required this.item, this.isLargeScreen = false});
+  const LegendItem({super.key, required this.item});
 
   final LayananItem item;
-  final bool isLargeScreen;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
         Container(
-          width: isLargeScreen ? 18 : 14,
-          height: isLargeScreen ? 18 : 14,
+          width: 15,
+          height: 15,
           decoration: const BoxDecoration(
             color: Colors.blue,
             shape: BoxShape.circle,
           ),
         ),
-        const SizedBox(width: 8),
+        const SizedBox(width: 10),
         Text(
           '${item.title} (${item.count})',
-          style: AppFonts.smallText.copyWith(
-            color: AppColor.dark,
-            fontSize: isLargeScreen ? 15 : 13,
-            fontWeight: FontWeight.w500,
-          ),
+          style: AppFonts.smallText.copyWith(color: AppColor.dark),
         ),
       ],
     );

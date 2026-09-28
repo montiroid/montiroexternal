@@ -144,7 +144,7 @@ class DateHandle {
   String formatWithHourDashboard(DateTime dateTime) {
     String two(int n) => n.toString().padLeft(2, '0');
 
-    return '${two(dateTime.day)}-${two(dateTime.month)}-${dateTime.year}, '
+    return '${two(dateTime.day)}-${two(dateTime.month)}-${two(dateTime.year % 100)}, '
         '${two(dateTime.hour)}:${two(dateTime.minute)}';
   }
 
