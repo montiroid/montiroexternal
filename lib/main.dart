@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:montiro_external/page/PageMou.dart';
 import 'package:montiro_external/page/page_dashboard.dart';
 import 'package:montiro_external/page/page_emergency_detail.dart';
 import 'package:montiro_external/page/page_handover.dart';
@@ -11,6 +12,7 @@ import 'package:montiro_external/page/page_survey_2.dart';
 import 'package:montiro_external/provider/provider_dashboard.dart';
 import 'package:montiro_external/provider/provider_emergency_detail.dart';
 import 'package:montiro_external/provider/provider_handover.dart';
+import 'package:montiro_external/provider/provider_mou.dart';
 import 'package:montiro_external/provider/provider_survey_v2.dart';
 import 'package:montiro_external/service/service_booking.dart';
 import 'package:provider/provider.dart';
@@ -101,6 +103,27 @@ class MyApp extends StatelessWidget {
                   idEmergency:
                       int.tryParse(state.queryParams["id"] ?? "0") ?? 0,
                   type: int.tryParse(state.queryParams["receiver"] ?? "0") ?? 0,
+                ),
+              ),
+              transitionsBuilder:
+                  (context, animation, secondaryAnimation, child) =>
+                      FadeTransition(opacity: animation, child: child),
+            ),
+          ),
+          GoRoute(
+            path: '/mou',
+            name: 'mou',
+            pageBuilder: (context, state) => CustomTransitionPage<void>(
+              key: state.pageKey,
+              transitionDuration: const Duration(seconds: 0),
+              child: MultiProvider(
+                providers: [
+                  ChangeNotifierProvider(
+                    create: (context) => ProviderMou(),
+                  ),
+                ],
+                child: PageMou(
+                  idMitra: int.tryParse(state.queryParams["id"] ?? "0") ?? 0,
                 ),
               ),
               transitionsBuilder:
