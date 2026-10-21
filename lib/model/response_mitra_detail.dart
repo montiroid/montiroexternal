@@ -24,34 +24,31 @@ class ResponseMitraDetail {
 class MitraDetail {
   MitraDetail({
     required this.id,
-    required this.type,
     required this.namaPIC,
     required this.namaMitra,
     required this.alamatMitra,
+    required this.fileName,
+    required this.urlFile,
     required this.mouSignedAt,
-    required this.mouSignatureName,
-    required this.mouReceiverName,
   });
 
   int id;
-  int type; // 1 = towing, 2 = montir
   String namaPIC;
   String namaMitra;
   String alamatMitra;
+  String fileName;
+  String urlFile;
   String mouSignedAt;
-  String mouSignatureName;
-  String mouReceiverName;
 
-  bool get isSigned => mouSignedAt.isNotEmpty;
+  bool get isSigned => fileName.isNotEmpty;
 
   factory MitraDetail.fromJson(Map<String, dynamic> json) => MitraDetail(
         id: json["id"] ?? 0,
-        type: json["type"] ?? 1,
         namaPIC: json["nama_pic"] ?? "",
         namaMitra: json["nama_mitra"] ?? "",
         alamatMitra: json["alamat_mitra"] ?? "",
+        fileName: json["file_name"] ?? "",
+        urlFile: json["url_file"] ?? "",
         mouSignedAt: json["mou_signed_at"] ?? "",
-        mouSignatureName: json["mou_signature_name"] ?? "",
-        mouReceiverName: json["mou_receiver_name"] ?? "",
       );
 }

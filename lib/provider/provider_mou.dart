@@ -33,7 +33,7 @@ class ProviderMou with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> submitMou(BuildContext context, int idMitra) async {
+  Future<void> submitMou(BuildContext context, int idMitra, int type) async {
     if (signatureController.isEmpty) {
       submitErrorMessage = 'Tanda tangan tidak boleh kosong!';
       notifyListeners();
@@ -61,20 +61,16 @@ class ProviderMou with ChangeNotifier {
       String signatureBase64 = base64Encode(signaturePngBytes);
       var signatureEncoded = "data:image/png;base64,$signatureBase64";
 
-      final detail = responseMitraDetail?.mitraDetail;
-
       final result = await ServiceMou().submitMou(
         idMitra: idMitra,
-        type: detail?.type ?? 1,
-        namaPIC: detail?.namaPIC ?? "",
-        namaMitra: detail?.namaMitra ?? "",
-        alamatMitra: detail?.alamatMitra ?? "",
+        type: type,
         signature: signatureEncoded,
       );
 
       if (result) {
         submitSuccess = true;
         signatureController.clear();
+        await detail(idMitra); // Refresh data biar dapet URL PDF
       } else {
         submitErrorMessage = 'Gagal mengirim MoU. Silakan coba lagi.';
       }
@@ -88,13 +84,6 @@ class ProviderMou with ChangeNotifier {
     if (context.mounted) {
       Navigator.pop(context);
     }
-  }
-
-  void resetForm() {
-    signatureController.clear();
-    submitSuccess = false;
-    submitErrorMessage = null;
-    notifyListeners();
   }
 
   @override

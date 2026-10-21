@@ -23,10 +23,7 @@ class ServiceMou {
 
   Future<bool> submitMou({
     required int idMitra,
-    required int type,
-    required String namaPIC,
-    required String namaMitra,
-    required String alamatMitra,
+    required int type, // 1 = Towing, 2 = Montir
     required String signature,
   }) async {
     try {
@@ -36,9 +33,6 @@ class ServiceMou {
       formData.fields.addAll([
         MapEntry('id_mitra', idMitra.toString()),
         MapEntry('type', type.toString()),
-        MapEntry('nama_pic', namaPIC),
-        MapEntry('nama_mitra', namaMitra),
-        MapEntry('alamat_mitra', alamatMitra),
         MapEntry('signature', signature),
       ]);
 
