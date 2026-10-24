@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:montiro_external/page/page_dashboard.dart';
 import 'package:montiro_external/page/page_emergency_detail.dart';
 import 'package:montiro_external/page/page_handover.dart';
+import 'package:montiro_external/page/page_mou_ambulance.dart';
 import 'package:montiro_external/page/page_mou_montir.dart';
 import 'package:montiro_external/page/page_mou_towing.dart';
 import 'package:montiro_external/page/page_qr.dart';
@@ -34,6 +35,11 @@ import 'provider/provider_qr.dart';
 // flutter build web --release
 // firebase deploy --only hosting
 
+/*
+git add .
+git commit -m "update"
+git push 
+*/
 
 void main() {
   setPathUrlStrategy();
@@ -134,7 +140,28 @@ class MyApp extends StatelessWidget {
                       FadeTransition(opacity: animation, child: child),
             ),
           ),
-                    GoRoute(
+          GoRoute(
+            path: '/mou-ambulance',
+            name: 'mou-ambulance',
+            pageBuilder: (context, state) => CustomTransitionPage<void>(
+              key: state.pageKey,
+              transitionDuration: const Duration(seconds: 0),
+              child: MultiProvider(
+                providers: [
+                  ChangeNotifierProvider(
+                    create: (context) => ProviderMou(),
+                  ),
+                ],
+                child: PageMouAmbulance(
+                  idMitra: int.tryParse(state.queryParams["id"] ?? "0") ?? 0,
+                ),
+              ),
+              transitionsBuilder:
+                  (context, animation, secondaryAnimation, child) =>
+                      FadeTransition(opacity: animation, child: child),
+            ),
+          ),
+          GoRoute(
             path: '/mou-towing',
             name: 'mou-towing',
             pageBuilder: (context, state) => CustomTransitionPage<void>(
