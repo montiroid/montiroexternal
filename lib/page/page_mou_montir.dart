@@ -93,17 +93,17 @@ class _PageMouMontirState extends State<PageMouMontir> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Center(
+            const Center(
               child: Column(
                 children: [
-                  const Text(
+                  Text(
                     'MEMORANDUM OF UNDERSTANDING',
                     textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
                   ),
-                  const SizedBox(height: 4),
-                  const Text(
-                    'ANTARA PT. BRILIAN INOVASI GEMILANG (MONTIRO.ID) DENGAN MITRA MONTIR',
+                  SizedBox(height: 4),
+                  Text(
+                    'PT BRILIAN INOVASI GEMILANG (MONTIRO.ID) DENGAN MITRA TEKNISI',
                     textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700),
                   ),
@@ -166,11 +166,9 @@ class _PageMouMontirState extends State<PageMouMontir> {
                           fontWeight: FontWeight.w600,
                           color: _typeColor)),
                   const SizedBox(height: 12),
-                  _buildMouRow('Nama Owner', detail.namaPIC),
-                  const SizedBox(height: 8),
-                  _buildMouRow('Jabatan', detail.jabatanPIC),
-                  const SizedBox(height: 8),
                   _buildMouRow('Nama Bengkel', detail.namaMitra),
+                  const SizedBox(height: 8),
+                  _buildMouRow('Nama Owner', detail.namaPIC),
                   const SizedBox(height: 8),
                   _buildMouRow('Alamat Bengkel', detail.alamatMitra),
                 ],
@@ -225,6 +223,8 @@ class _PageMouMontirState extends State<PageMouMontir> {
                 'Teknis pembayaran akan dilakukan oleh Pihak Pertama melalui transfer ke nomor rekening bank milik Pihak Kedua dalam tempo selambat-lambatnya 7 (Tujuh) hari kalender sejak selesai servis, dengan sistem pencairan diakumulasi pada setiap hari Rabu.'),
             _buildPoin(6,
                 'Pihak Kedua tidak menyalahgunakan data Pihak Pertama termasuk data Customernya selain untuk keperluan pada saat pemberian layanan.'),
+            _buildPoin(7, 'Dapat menyediakan asuransi cargo / penderekan bila dibutuhkan.'),
+            _buildPoin(8, 'Pihak Kedua dilarang mengungkapkan, mengeksploitasi, atau menyampaikan kepada pihak yang tidak berwenang, termasuk dalam bentuk komentar, asumsi, atau informasi yang tidak dapat dipastikan kebenarannya.'),
             const SizedBox(height: 8),
             Text('Demikian surat ini telah disepakati kedua belah pihak.',
                 style: TextStyle(
@@ -289,10 +289,8 @@ class _PageMouMontirState extends State<PageMouMontir> {
     final bensin = detail.hargaMontirBensin;
     final kunci = detail.hargaMontirKunci;
 
-    if (jumper.isEmpty &&
-        ban.isEmpty &&
-        bensin.isEmpty &&
-        kunci.isEmpty) {
+    // Cek kalo a, b, c, d semuanya kosong, jangan tampilin poin 4
+    if (jumper.isEmpty && ban.isEmpty && bensin.isEmpty && kunci.isEmpty) {
       return const SizedBox.shrink();
     }
 
@@ -319,11 +317,11 @@ class _PageMouMontirState extends State<PageMouMontir> {
                   style: TextStyle(fontSize: 12, color: Colors.grey.shade800, height: 1.6),
                 ),
                 const SizedBox(height: 4),
-                if (jumper.isNotEmpty) _buildTextList('- Jasa jumper aki $jumper'),
-                if (ban.isNotEmpty) _buildTextList('- Jasa pergantian ban $ban'),
-                if (bensin.isNotEmpty) _buildTextList('- Jasa pengiriman bensin $bensin'),
-                if (kunci.isNotEmpty) _buildTextList('- Jasa locksmith (kunci tertinggal) $kunci'),
-                _buildTextList('- Jasa perawatan dan perbaikan lainnya menyesuaikan dengan harga bengkel.'),
+                if (jumper.isNotEmpty) _buildTextList('a. Jasa jumper aki $jumper;'),
+                if (ban.isNotEmpty) _buildTextList('b. Jasa pergantian ban $ban;'),
+                if (bensin.isNotEmpty) _buildTextList('c. Jasa pengiriman bensin $bensin;'),
+                if (kunci.isNotEmpty) _buildTextList('d. Jasa locksmith (kunci tertinggal) $kunci;'),
+                _buildTextList('e. Jasa perawatan dan perbaikan lainnya menyesuaikan dengan harga bengkel.'),
               ],
             ),
           ),
@@ -479,7 +477,7 @@ class _PageMouMontirState extends State<PageMouMontir> {
               await prov.submitMou(context, widget.idMitra, 2);
               if (prov.submitSuccess && mounted) {
                 CustomAlert.showSuccess(context,
-                    message: 'MoU Montir Berhasil Disubmit', onClose: () {});
+                    message: 'MoU Teknisi Berhasil Disubmit', onClose: () {});
               } else if (prov.submitErrorMessage != null && mounted) {
                 CustomAlert.showError(context,
                     title: 'Gagal',
@@ -504,54 +502,33 @@ class _PageMouMontirState extends State<PageMouMontir> {
   String get _namaHari {
     final hari = DateTime.now().weekday;
     switch (hari) {
-      case 1:
-        return 'Senin';
-      case 2:
-        return 'Selasa';
-      case 3:
-        return 'Rabu';
-      case 4:
-        return 'Kamis';
-      case 5:
-        return 'Jumat';
-      case 6:
-        return 'Sabtu';
-      case 7:
-        return 'Minggu';
-      default:
-        return '-';
+      case 1: return 'Senin';
+      case 2: return 'Selasa';
+      case 3: return 'Rabu';
+      case 4: return 'Kamis';
+      case 5: return 'Jumat';
+      case 6: return 'Sabtu';
+      case 7: return 'Minggu';
+      default: return '-';
     }
   }
 
   String get _namaBulan {
     final bulan = DateTime.now().month;
     switch (bulan) {
-      case 1:
-        return 'Januari';
-      case 2:
-        return 'Februari';
-      case 3:
-        return 'Maret';
-      case 4:
-        return 'April';
-      case 5:
-        return 'Mei';
-      case 6:
-        return 'Juni';
-      case 7:
-        return 'Juli';
-      case 8:
-        return 'Agustus';
-      case 9:
-        return 'September';
-      case 10:
-        return 'Oktober';
-      case 11:
-        return 'November';
-      case 12:
-        return 'Desember';
-      default:
-        return '-';
+      case 1: return 'Januari';
+      case 2: return 'Februari';
+      case 3: return 'Maret';
+      case 4: return 'April';
+      case 5: return 'Mei';
+      case 6: return 'Juni';
+      case 7: return 'Juli';
+      case 8: return 'Agustus';
+      case 9: return 'September';
+      case 10: return 'Oktober';
+      case 11: return 'November';
+      case 12: return 'Desember';
+      default: return '-';
     }
   }
 }
