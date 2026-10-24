@@ -361,7 +361,7 @@ class _PageMouTowingState extends State<PageMouTowing> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(
-            width: 130,
+            width: 190,
             child: Text('- $nama',
                 style: TextStyle(fontSize: 12, color: Colors.grey.shade800)),
           ),

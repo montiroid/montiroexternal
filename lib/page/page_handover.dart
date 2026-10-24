@@ -1048,7 +1048,9 @@ class PageHandoverState extends State<PageHandover>
             const SizedBox(width: 12),
             Expanded(
               child: Text(
-                'Saya menyatakan bahwa data di atas adalah benar',
+                widget.type == 1
+                    ? 'Saya menyatakan bahwa data di atas benar dan proses menaikkan kendaraan ke truk towing berjalan lancar tanpa kerusakan/kendala.'
+                    : 'Saya menyatakan bahwa data di atas benar dan proses menurunkan kendaraan ke truk towing berjalan lancar tanpa kerusakan/kendala.',
                 style: TextStyle(
                   fontSize: 13,
                   height: 1.4,
