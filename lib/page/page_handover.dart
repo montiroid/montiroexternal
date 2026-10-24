@@ -678,14 +678,6 @@ class PageHandoverState extends State<PageHandover>
     );
   }
 
-  String _getImageSize(Uint8List bytes) {
-    final sizeInKB = bytes.length / 1024;
-    if (sizeInKB < 1024) {
-      return '${sizeInKB.toStringAsFixed(1)} KB';
-    }
-    return '${(sizeInKB / 1024).toStringAsFixed(1)} MB';
-  }
-  // ==================== END IMAGE PICKER SECTION ====================
 
   Widget _buildSignatureCard(ProviderHandover prov) {
     final detail = prov.responseHandoverDetail?.emergencyDetail;

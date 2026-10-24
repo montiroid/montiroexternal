@@ -168,6 +168,8 @@ class _PageMouMontirState extends State<PageMouMontir> {
                   const SizedBox(height: 12),
                   _buildMouRow('Nama Owner', detail.namaPIC),
                   const SizedBox(height: 8),
+                  _buildMouRow('Jabatan', detail.jabatanPIC),
+                  const SizedBox(height: 8),
                   _buildMouRow('Nama Bengkel', detail.namaMitra),
                   const SizedBox(height: 8),
                   _buildMouRow('Alamat Bengkel', detail.alamatMitra),
@@ -218,8 +220,7 @@ class _PageMouMontirState extends State<PageMouMontir> {
                 'Pihak Kedua berperan sebagai pelaksana layanan jasa servis terhadap mobil customer. Dalam hal ini Pihak Kedua wajib menjaga etika sopan santun dalam melayani sesuai kebutuhan customer dengan standar layanan yang baik dan juga berpakaian yang baik (memakai sepatu dan tidak menggunakan celana pendek) serta tidak merokok saat memberikan layanan terhadap customer.'),
             _buildPoin(3,
                 'Pihak Pertama wajib mengirim SPK (Surat Perintah Kerja) setiap kali order layanan kepada Pihak Kedua.'),
-            _buildPoin(4,
-                'Biaya jasa layanan akan ditanggung oleh Pihak Pertama dan akan dibayarkan kepada Pihak Kedua yaitu:\n- Jasa jumper aki Rp 200.000 (Dua Ratus Ribu Rupiah);\n- Jasa pergantian ban Rp 200.000 (Dua Ratus Ribu Rupiah);\n- Jasa pengiriman bensin Rp 200.000 (Dua Ratus Ribu Rupiah);\n- Jasa locksmith (kunci tertinggal) Rp 250.000 (Dua Ratus Lima Puluh Ribu Rupiah);\n- Jasa perawatan dan perbaikan lainnya menyesuaikan dengan harga bengkel.'),
+            _buildPoinMontir(detail),
             _buildPoin(5,
                 'Teknis pembayaran akan dilakukan oleh Pihak Pertama melalui transfer ke nomor rekening bank milik Pihak Kedua dalam tempo selambat-lambatnya 7 (Tujuh) hari kalender sejak selesai servis, dengan sistem pencairan diakumulasi pada setiap hari Rabu.'),
             _buildPoin(6,
@@ -278,6 +279,65 @@ class _PageMouMontirState extends State<PageMouMontir> {
                       color: Colors.grey.shade800,
                       height: 1.6))),
         ],
+      ),
+    );
+  }
+
+  Widget _buildPoinMontir(MitraDetail detail) {
+    final jumper = detail.hargaMontirJumper;
+    final ban = detail.hargaMontirBan;
+    final bensin = detail.hargaMontirBensin;
+    final kunci = detail.hargaMontirKunci;
+
+    if (jumper.isEmpty &&
+        ban.isEmpty &&
+        bensin.isEmpty &&
+        kunci.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            width: 22,
+            child: Text('4.',
+                style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w700,
+                    color: _typeColor)),
+          ),
+          const SizedBox(width: 6),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Biaya jasa layanan akan ditanggung oleh Pihak Pertama dan akan dibayarkan kepada Pihak Kedua yaitu:',
+                  style: TextStyle(fontSize: 12, color: Colors.grey.shade800, height: 1.6),
+                ),
+                const SizedBox(height: 4),
+                if (jumper.isNotEmpty) _buildTextList('- Jasa jumper aki $jumper'),
+                if (ban.isNotEmpty) _buildTextList('- Jasa pergantian ban $ban'),
+                if (bensin.isNotEmpty) _buildTextList('- Jasa pengiriman bensin $bensin'),
+                if (kunci.isNotEmpty) _buildTextList('- Jasa locksmith (kunci tertinggal) $kunci'),
+                _buildTextList('- Jasa perawatan dan perbaikan lainnya menyesuaikan dengan harga bengkel.'),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTextList(String text) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 10, bottom: 2),
+      child: Text(
+        text,
+        style: TextStyle(fontSize: 12, color: Colors.grey.shade800, height: 1.6),
       ),
     );
   }
@@ -416,7 +476,7 @@ class _PageMouMontirState extends State<PageMouMontir> {
       onPressed: prov.isSubmitting
           ? null
           : () async {
-              await prov.submitMou(context, widget.idMitra, 2); // 2 = Montir
+              await prov.submitMou(context, widget.idMitra, 2);
               if (prov.submitSuccess && mounted) {
                 CustomAlert.showSuccess(context,
                     message: 'MoU Montir Berhasil Disubmit', onClose: () {});

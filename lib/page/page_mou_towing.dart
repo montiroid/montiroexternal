@@ -168,6 +168,8 @@ class _PageMouTowingState extends State<PageMouTowing> {
                   const SizedBox(height: 12),
                   _buildMouRow('Nama PIC/Admin', detail.namaPIC),
                   const SizedBox(height: 8),
+                  _buildMouRow('Jabatan', detail.jabatanPIC),
+                  const SizedBox(height: 8),
                   _buildMouRow('Nama Towing', detail.namaMitra),
                   const SizedBox(height: 8),
                   _buildMouRow('Alamat Homebase', detail.alamatMitra),
@@ -216,8 +218,7 @@ class _PageMouTowingState extends State<PageMouTowing> {
                 'Pihak Pertama dalam hal ini berperan sebagai penghubung antara Pihak Kedua dengan Pengguna Jasa (customer). Pada saat ada order Pihak Pertama akan mengirim informasi data customer kepada Pihak Kedua diawal untuk diproses lebih lanjut.'),
             _buildPoin(2,
                 'Pihak Kedua berperan sebagai pelaksana layanan jasa towing terhadap mobil customer. Dalam hal ini Pihak Kedua wajib menjaga kualitas pelayanan yang diberikan ke customer sesuai kebutuhan customer dengan standar layanan yang baik termasuk berpakaian yang baik, memakai sepatu, dan tidak merokok saat memberikan layanan.'),
-            _buildPoin(3,
-                'Harga jasa layanan towing khusus mobil mogok yang dilakukan oleh Pihak Kedua terhadap Customer untuk area dibawah 30 KM dari homebase atau dalam kota yaitu Rp550.000 (Lima Ratus Lima Puluh Ribu Rupiah). Adapun untuk jasa towing khusus evakuasi kecelakaan yaitu Rp800.000 (Delapan Ratus Ribu Rupiah) dari homebase atau dalam kota.'),
+            _buildPoinTowing(detail),
             _buildPoin(4,
                 'Biaya pembatalan dapat terjadi apabila layanan towing Pihak Kedua sudah tiba dilokasi titik penjemputan namun mobil Customer batal diangkut oleh towing maka Pihak Pertama akan membayar Biaya Pembatalan kepada Pihak Kedua sebesar 50% dari biaya yang tercantum pada SPK (Surat Perintah Kerja).'),
             _buildPoin(5,
@@ -281,6 +282,96 @@ class _PageMouTowingState extends State<PageMouTowing> {
                       fontSize: 12,
                       color: Colors.grey.shade800,
                       height: 1.6))),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPoinTowing(MitraDetail detail) {
+    final hDerek = detail.hargaTowingDerek;
+    final hRoller = detail.hargaTowingRoller;
+    final hHidrolik = detail.hargaTowingHidrolik;
+    final hWheelLift = detail.hargaTowingWheelLift;
+    final hEvakuasi = detail.hargaTowingEvakuasi;
+
+    if (hDerek.isEmpty &&
+        hRoller.isEmpty &&
+        hHidrolik.isEmpty &&
+        hWheelLift.isEmpty &&
+        hEvakuasi.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            width: 22,
+            child: Text('3.',
+                style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w700,
+                    color: _typeColor)),
+          ),
+          const SizedBox(width: 6),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Harga jasa layanan towing khusus mobil mogok yang dilakukan oleh Pihak Kedua terhadap Customer untuk area dibawah 30 KM dari homebase atau dalam kota yaitu:',
+                  style: TextStyle(fontSize: 12, color: Colors.grey.shade800, height: 1.6),
+                ),
+                const SizedBox(height: 4),
+                if (hDerek.isNotEmpty)
+                  _buildRowListTowing('Towing Derek Gendong', hDerek),
+                if (hRoller.isNotEmpty)
+                  _buildRowListTowing('Towing Roller', hRoller),
+                if (hHidrolik.isNotEmpty)
+                  _buildRowListTowing('Towing Hidrolik', hHidrolik),
+                if (hWheelLift.isNotEmpty)
+                  _buildRowListTowing('Towing Wheel Lift', hWheelLift),
+                if (hEvakuasi.isNotEmpty) ...[
+                  const SizedBox(height: 4),
+                  RichText(
+                    text: TextSpan(
+                      style: TextStyle(fontSize: 12, color: Colors.grey.shade800, height: 1.6),
+                      children: [
+                        const TextSpan(text: 'Adapun untuk jasa towing khusus evakuasi kecelakaan yaitu '),
+                        TextSpan(text: hEvakuasi, style: const TextStyle(fontWeight: FontWeight.w700)),
+                        const TextSpan(text: ' dari homebase atau dalam kota.'),
+                      ],
+                    ),
+                  ),
+                ],
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildRowListTowing(String nama, String harga) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 10, bottom: 2),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            width: 130,
+            child: Text('- $nama',
+                style: TextStyle(fontSize: 12, color: Colors.grey.shade800)),
+          ),
+          Expanded(
+            child: Text(harga,
+                style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.grey.shade800)),
+          ),
         ],
       ),
     );

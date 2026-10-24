@@ -114,8 +114,8 @@ class MyApp extends StatelessWidget {
             ),
           ),
           GoRoute(
-            path: '/mou-montir',
-            name: 'mou-montir',
+            path: '/mou-mitra',
+            name: 'mou-mitra',
             pageBuilder: (context, state) => CustomTransitionPage<void>(
               key: state.pageKey,
               transitionDuration: const Duration(seconds: 0),

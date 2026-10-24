@@ -8,8 +8,8 @@ class ServiceMou {
   Dio dio = Dio();
 
   Future<ResponseMitraDetail> detail(int idMitra) async {
-    var apiFull = "${apiProd}mitra/detail";
-    var data = {"id": idMitra};
+    var apiFull = "${apiProd}bo/montir/emergency/detail";
+    var data = {"id_montir": idMitra};
     print(apiFull);
     print(prettyJson(data, indent: 2));
     var response = await dio.post(
@@ -23,7 +23,7 @@ class ServiceMou {
 
   Future<bool> submitMou({
     required int idMitra,
-    required int type, // 1 = Towing, 2 = Montir
+    required int type, 
     required String signature,
   }) async {
     try {
