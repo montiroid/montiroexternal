@@ -8,8 +8,10 @@ class ResponseSurvey {
   final SurveyDetail detail;
 
   factory ResponseSurvey.fromJson(Map<String, dynamic> json) => ResponseSurvey(
-        status: json["status"],
-        detail: SurveyDetail.fromJson(json["detail"]),
+        status: json["status"] ?? false,
+        detail: SurveyDetail.fromJson(
+          (json["detail"] as Map<String, dynamic>?) ?? {},
+        ),
       );
 }
 
@@ -30,6 +32,7 @@ class SurveyDetail {
     this.averageRating,
     this.phoneOvo,
     this.answers = const [],
+    required this.garasi,
   });
 
   final int id;
@@ -47,6 +50,7 @@ class SurveyDetail {
   final double? averageRating;
   final String? phoneOvo;
   final List<SurveyAnswerItem> answers;
+  final GarasiData garasi;
 
   String get titleTransaksi {
     if (type == "MITSUBISHI-LEVEL-3") {
@@ -57,31 +61,35 @@ class SurveyDetail {
   }
 
   factory SurveyDetail.fromJson(Map<String, dynamic> json) => SurveyDetail(
-        id: json["id"],
+        id: (json["id"] as num?)?.toInt() ?? 0,
         carInfo: json["car_info"] ?? "",
         nomorRangka: json["nomor_rangka"] ?? "",
-        idTransaksi: json["id_transaksi"],
-        type: json["type"],
-        ratingPuas: json["rating_puas"],
-        createdAt: json["created_at"],
+        idTransaksi: (json["id_transaksi"] as num?)?.toInt() ?? 0,
+        type: json["type"] ?? "",
+        ratingPuas: (json["rating_puas"] as num?)?.toInt(),
+        createdAt: json["created_at"] ?? "",
         doneAt: json["done_at"],
-        uniqueId: json["unique_id"],
-        createdBy: json["created_by"],
-        layananName: json["layanan_name"],
-        noPolisi: json["no_polisi"],
+        uniqueId: json["unique_id"] ?? "",
+        createdBy: json["created_by"] ?? "",
+        layananName: json["layanan_name"] ?? "",
+        noPolisi: json["no_polisi"] ?? "",
         averageRating: json["average_rating"] != null
             ? (json["average_rating"] as num).toDouble()
             : null,
         phoneOvo: json["phone_ovo"],
         answers: json["answers"] != null
             ? (json["answers"] as List)
-                .map((e) => SurveyAnswerItem.fromJson(e))
+                .map((e) => SurveyAnswerItem.fromJson(
+                      (e as Map<String, dynamic>?) ?? {},
+                    ))
                 .toList()
             : [],
+        garasi: GarasiData.fromJson(
+          (json["garasi"] as Map<String, dynamic>?) ?? {},
+        ),
       );
 }
 
-// ===== MODEL BARU =====
 class SurveyAnswerItem {
   SurveyAnswerItem({
     required this.questionId,
@@ -95,8 +103,45 @@ class SurveyAnswerItem {
 
   factory SurveyAnswerItem.fromJson(Map<String, dynamic> json) =>
       SurveyAnswerItem(
-        questionId: json["question_id"],
-        rating: (json["rating"] as num).toDouble(),
+        questionId: (json["question_id"] as num?)?.toInt() ?? 0,
+        rating: (json["rating"] as num?)?.toDouble() ?? 0,
         alasan: json["alasan"] ?? "",
+      );
+}
+
+class GarasiData {
+  GarasiData({
+    required this.modelName,
+    required this.varianName,
+    required this.carBrandName,
+    required this.tahunProduksi,
+    required this.platLeft,
+    required this.platCenter,
+    required this.platRight,
+    required this.nomorRangka,
+  });
+
+  final String modelName;
+  final String varianName;
+  final String carBrandName;
+  final int tahunProduksi;
+  String platLeft;
+  String platCenter;
+  String platRight;
+  final String nomorRangka;
+
+  String get platText {
+    return ("$platLeft $platCenter $platRight").trim().toUpperCase();
+  }
+
+  factory GarasiData.fromJson(Map<String, dynamic> json) => GarasiData(
+        modelName: json["model_name"] ?? "",
+        varianName: json["varian_name"] ?? "",
+        carBrandName: json["car_brand_name"] ?? "",
+        tahunProduksi: (json["tahun_produksi"] as num?)?.toInt() ?? 0,
+        platLeft: json["plat_left"] ?? "",
+        platCenter: json["plat_center"] ?? "",
+        platRight: json["plat_right"] ?? "",
+        nomorRangka: json["nomor_rangka"] ?? "",
       );
 }

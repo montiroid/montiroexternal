@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../model/model_garasi.dart';
 import '../model/model_survey.dart';
 import '../service/service_survey.dart';
 import '../shared/shared_config.dart';
@@ -31,9 +30,8 @@ class ProviderSurveyVersi2 with ChangeNotifier {
   final String env;
 
   ResponseSurvey? responseSurvey;
-  ResponseGarasi? responseGarasi;
   var isLoading = true;
-  var phoneController =TextEditingController();
+  var phoneController = TextEditingController();
 
   ProviderSurveyVersi2(
     this.uniqueId,
@@ -101,26 +99,6 @@ class ProviderSurveyVersi2 with ChangeNotifier {
       env,
       uniqueId,
     );
-    if (responseSurvey?.detail.type == "MITSUBISHI-LEVEL-3") {
-      responseGarasi = ResponseGarasi(
-          status: true,
-          data: GarasiData(
-            modelName: responseSurvey?.detail.carInfo ?? '',
-            varianName: '',
-            carBrandName: '',
-            tahunProduksi: 0,
-            platLeft: '',
-            platCenter: '',
-            platRight: '',
-          ));
-    } else {
-      responseGarasi = await ServiceSurvey().garasi(
-        env,
-        responseSurvey?.detail.noPolisi ?? '',
-        responseSurvey?.detail.nomorRangka ?? '',
-      );
-    }
-
     isLoading = false;
     notifyListeners();
   }

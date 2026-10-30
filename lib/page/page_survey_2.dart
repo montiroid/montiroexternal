@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:montiro_external/page/page_survey.dart';
 import 'package:montiro_external/shared/shared_config.dart';
 import 'package:montiro_external/widget/widget_loading.dart';
 import 'package:montiro_external/widget/widget_toolbar_main.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
+import '../model/model_survey.dart';
 import '../provider/provider_survey_v2.dart';
 import '../shared/shared_color.dart';
 import '../shared/shared_font.dart';
@@ -14,6 +14,96 @@ class PageSurveyVersi2 extends StatefulWidget {
 
   @override
   PageSurveyVersi2State createState() => PageSurveyVersi2State();
+}
+
+class ItemUserGarage extends StatelessWidget {
+  final GarasiData model;
+
+  const ItemUserGarage({
+    Key? key,
+    required this.model,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {},
+      child: Stack(
+        children: [
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(15),
+            margin: const EdgeInsets.only(bottom: Config.defaultMarginSide),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: const BorderRadius.all(Radius.circular(10)),
+              border: Border.all(
+                color: Colors.grey.withAlpha(90),
+              ),
+            ),
+            child: Column(
+              children: [
+                SizedBox(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    model.carBrandName.toUpperCase(),
+                                    style: AppFonts.smallText,
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 15,
+                                ),
+                              ],
+                            ),
+                            Text(
+                              ("${model.modelName} ${model.varianName}")
+                                  .toUpperCase(),
+                              style: AppFonts.smallText,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+                if (model.tahunProduksi != 0) ...[
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          model.platText,
+                          style: AppFonts.smallText,
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 15,
+                      ),
+                      Text(
+                        ("Tahun Produksi ${model.tahunProduksi}"),
+                        style: AppFonts.smallText,
+                      ),
+                    ],
+                  ),
+                ],
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 class PageSurveyVersi2State extends State<PageSurveyVersi2> {
@@ -49,8 +139,7 @@ class PageSurveyVersi2State extends State<PageSurveyVersi2> {
                   ),
                   if (prov.isLoading) ...[
                     const Align(child: CustomLoading()),
-                  ] else if (prov.responseSurvey == null &&
-                      prov.responseGarasi == null) ...[
+                  ] else if (prov.responseSurvey == null) ...[
                     Align(
                       child: Text(
                         'Terjadi Kesalahan. Mohon Muat Ulang Halaman Ini',
@@ -61,7 +150,7 @@ class PageSurveyVersi2State extends State<PageSurveyVersi2> {
                       null) ...[
                     const SizedBox(height: 15),
                     ItemUserGarage(
-                      model: prov.responseGarasi!.data,
+                      model: prov.responseSurvey!.detail.garasi,
                     ),
                     Container(
                       width: double.infinity,
@@ -226,9 +315,6 @@ class PageSurveyVersi2State extends State<PageSurveyVersi2> {
     );
   }
 
-  // ================================================================
-  // SUMMARY SETELAH SUBMIT / SUDAH DIISI
-  // ================================================================
   Widget _buildSuccessSummary(ProviderSurveyVersi2 prov) {
     final detail = prov.responseSurvey!.detail;
     final answers = detail.answers;
@@ -240,7 +326,6 @@ class PageSurveyVersi2State extends State<PageSurveyVersi2> {
       children: [
         const SizedBox(height: 15),
 
-        // ===== HEADER SUKSES =====
         Container(
           width: double.infinity,
           padding: const EdgeInsets.all(20),
@@ -269,7 +354,6 @@ class PageSurveyVersi2State extends State<PageSurveyVersi2> {
         ),
         const SizedBox(height: 15),
 
-        // ===== INFO CASE =====
         Container(
           width: double.infinity,
           padding: const EdgeInsets.all(15),
@@ -304,7 +388,6 @@ class PageSurveyVersi2State extends State<PageSurveyVersi2> {
         ),
         const SizedBox(height: 15),
 
-        // ===== RINGKASAN RATA-RATA =====
         if (avgRating != null)
           Container(
             width: double.infinity,
@@ -348,9 +431,7 @@ class PageSurveyVersi2State extends State<PageSurveyVersi2> {
           ),
         const SizedBox(height: 15),
 
-        // ===== DETAIL JAWABAN PER PERTANYAAN =====
         ...answers.map<Widget>((ans) {
-          // Cari teks pertanyaan dari prov.questions (by id)
           final q = prov.questions.firstWhere(
             (item) => item.id == ans.questionId,
             orElse: () => SurveyQuestion(
@@ -371,7 +452,6 @@ class PageSurveyVersi2State extends State<PageSurveyVersi2> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Nomor + pertanyaan
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -398,7 +478,6 @@ class PageSurveyVersi2State extends State<PageSurveyVersi2> {
                 ),
                 const SizedBox(height: 12),
 
-                // Skor
                 Container(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 12,
@@ -422,7 +501,6 @@ class PageSurveyVersi2State extends State<PageSurveyVersi2> {
                   ),
                 ),
 
-                // Alasan (kalau ada)
                 if (ans.alasan.trim().isNotEmpty) ...[
                   const SizedBox(height: 12),
                   Text(
@@ -449,7 +527,6 @@ class PageSurveyVersi2State extends State<PageSurveyVersi2> {
           );
         }).toList(),
 
-        // ===== NOMOR HP OVO/GOPAY =====
         if (phone.trim().isNotEmpty)
           Container(
             width: double.infinity,
